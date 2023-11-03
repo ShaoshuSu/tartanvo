@@ -10,6 +10,7 @@ import numpy as np
 import cv2
 from os import mkdir
 from os.path import isdir
+from tqdm import  tqdm
 
 def get_args():
     parser = argparse.ArgumentParser(description='HRL')
@@ -45,6 +46,11 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
 
+    print('================================================================')
+    print("model-name")
+    print(args.model_name)
+    print('================================================================')
+
     testvo = TartanVO(args.model_name)
 
     # load trajectory data from a folder
@@ -69,14 +75,18 @@ if __name__ == '__main__':
 
     motionlist = []
     testname = datastr + '_' + args.model_name.split('.')[0]
+
+    # testname
     if args.save_flow:
         flowdir = 'results/'+testname+'_flow'
         if not isdir(flowdir):
             mkdir(flowdir)
         flowcount = 0
-    while True:
+    
+    # print(len(testDataiter))
+    for idx in tqdm(range(len(testDataiter))):
         try:
-            sample = testDataiter.next()
+            sample = next(testDataiter)   
         except StopIteration:
             break
 
@@ -103,7 +113,8 @@ if __name__ == '__main__':
             print("==> ATE: %.4f,\t KITTI-R/t: %.4f, %.4f" %(results['ate_score'], results['kitti_score'][0], results['kitti_score'][1]))
 
         # save results and visualization
-        plot_traj(results['gt_aligned'], results['est_aligned'], vis=False, savefigname='results/'+testname+'.png', title='ATE %.4f' %(results['ate_score']))
-        np.savetxt('results/'+testname+'.txt',results['est_aligned'])
+        fig_name =args.model_name.split('.')[0]
+        plot_traj(results['gt_aligned'], results['est_aligned'], vis=False, savefigname=fig_name+'.png', title='ATE %.4f' %(results['ate_score']))
+        np.savetxt(fig_name+'.txt',results['est_aligned'])
     else:
         np.savetxt('results/'+testname+'.txt',poselist)

@@ -1,6 +1,16 @@
 # Copyright (c) 2020 Carnegie Mellon University, Wenshan Wang <wenshanw@andrew.cmu.edu>
 # For License information please see the LICENSE file in the root directory.
 
+import sys
+import os
+
+# Get the directory containing the current script
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+print("current_directory=",current_directory)
+if current_directory not in sys.path:
+    sys.path.append(current_directory)
+
 import numpy as np
 from evaluator_base import ATEEvaluator, RPEEvaluator, KittiEvaluator, transform_trajs, quats2SEs
 from os.path import isdir, isfile

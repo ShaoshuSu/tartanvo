@@ -45,8 +45,8 @@ class TartanVO(object):
 
         # load the whole model
         if model_name.endswith('.pkl'):
-            modelname = 'models/' + model_name
-            self.load_model(self.vonet, modelname)
+            # modelname = 'models/' + model_name
+            self.load_model(self.vonet, model_name)
 
         self.vonet.cuda()
 
@@ -105,6 +105,6 @@ class TartanVO(object):
         else:
             print('    scale is not given, using 1 as the default scale value..')
 
-        print("{} Pose inference using {}s: \n{}".format(self.test_count, inferencetime, posenp))
+        # print("{} Pose inference using {}s: \n{}".format(self.test_count, inferencetime, posenp))
         return posenp, flownp
 
